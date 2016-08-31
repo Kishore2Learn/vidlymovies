@@ -1,0 +1,15 @@
+﻿@model VidlyMovies.Models.Movie
+@{
+    ViewBag.Title = "Updated MovieDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br />
+@if (ViewBag.ContainData == "1")
+{
+    <h2>@ViewBag.Description  <b class="text-danger">@Model.Name</b></h2>
+}
+else
+{
+    <h2>@ViewBag.Description</h2>
+}
+<META HTTP-EQUIV="Refresh" CONTENT="2;URL=@(Url.Action("Index", "Movies"))">

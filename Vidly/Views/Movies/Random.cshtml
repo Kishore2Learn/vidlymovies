@@ -1,0 +1,198 @@
+﻿@using VidlyMovies.Models
+@using VidlyMovies.ViewModels
+@model VidlyMovies.ViewModels.RandomMovieViewModel
+@{
+    ViewBag.Title = "Random Movie";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    var className = Model.Customers.Count() < 2 ? "panel panel-success" : "panel panel-danger";
+}
+<div class="@className">
+    <div class="panel-heading">
+        <h3 class="panel-title">@Model.Movie.Name</h3>
+    </div>
+    <div class="panel-body">
+        <ol>
+            @foreach (Customer customer in @Model.Customers)
+            {
+                <li>@customer.Name</li>
+            }
+        </ol>
+    </div>
+</div>
+<h1>Movie stock</h1>
+<table class="table table-striped table-hover table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Movie Name</th>
+            <th>Number of custumers rented</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>1</td>
+            <td>@Model.Movie.Name</td>
+            <td>@Model.Customers.Count()</td>
+        </tr>
+    </tbody>
+ </table>
+@* 
+Expanding rows
+ *@
+<h1>Expanding rows</h1> 
+<div class="panel panel-default">
+    <div class="panel-heading"><h3>Movies</h3></div>
+    <div class="panel-body">
+        <table class="table table-condensed" style="border-collapse:collapse;">
+
+            <thead>
+                <tr>
+                    <th>&nbsp;</th>
+                    <th>Movie Name</th>
+                    <th>Movie ID</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-toggle="collapse" data-target="#@Model.Movie.Name" class="accordion-toggle">
+                    <!-- glyphicon-eye-open-->
+                    <td><button class="btn btn-default btn-xs" ><span class="glyphicon glyphicon-plus-sign"></span></button></td>
+                    <td>@Model.Movie.Name</td>
+                    <td>@Model.Movie.ID</td> 
+                </tr>
+                <tr>
+                    <td colspan="12" class="hiddenRow">
+                        <div class="accordian-body collapse" id="@Model.Movie.Name">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr><th>Customer Name</th>
+                                </thead>
+                                <tbody>
+                                        @foreach (Customer customer in @Model.Customers)
+                                        {
+                                            <tr><td>@customer.Name</td></tr>
+                                        }
+                                </tbody>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<hr />
+
+<h1 class="lead">Another example of expanding rows</h1>
+<div class="panel panel-default">
+    <div class="panel-heading"><h3>Object Store</h3></div>
+    <div class="panel-body">
+        <table class="table table-condensed table-hover" style="border-collapse:collapse;">
+
+            <thead>
+                <tr>
+                    <th>&nbsp;</th>
+                    <th>Job Name</th>
+                    <th>Description</th>
+                    <th>Provider Name</th>
+                    <th>Region</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr data-toggle="collapse" data-target="#demo1" class="accordion-toggle">
+                    <td><button class="btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open"></span></button></td>
+                    <td>OBS Name</td>
+                    <td>OBS Description</td>
+                    <td>hpcloud</td>
+                    <td>nova</td>
+                    <td> created</td>
+                </tr>
+                <tr>
+                    <td colspan="12" class="hiddenRow">
+                        <div class="accordian-body collapse" id="demo1">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr><td><a href="WorkloadURL">Workload link</a></td><td>Bandwidth: Dandwidth Details</td><td>OBS Endpoint: end point</td></tr>
+                                    <tr><th>Access Key</th><th>Secret Key</th><th>Status </th><th> Created</th><th> Expires</th><th>Actions</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>access-key-1</td>
+                                        <td>secretKey-1</td>
+                                        <td>Status</td>
+                                        <td>some date</td>
+                                        <td>some date</td>
+                                        <td>
+                                            <a href="../Home/Contact" class="btn btn-default btn-sm">
+                                                <i class="glyphicon glyphicon-cog"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </td>
+                </tr>
+                <tr data-toggle="collapse" data-target="#demo2" class="accordion-toggle">
+                    <td><button class="btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open"></span></button></td>
+                    <td>OBS Name</td>
+                    <td>OBS Description</td>
+                    <td>hpcloud</td>
+                    <td>nova</td>
+                    <td> created</td>
+                </tr>
+                <tr>
+                    <td colspan="6" class="hiddenRow"><div id="demo2" class="accordian-body collapse">Demo2</div></td>
+                </tr>
+                <tr data-toggle="collapse" data-target="#demo3" class="accordion-toggle">
+                    <td><button class="btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open"></span></button></td>
+                    <td>OBS Name</td>
+                    <td>OBS Description</td>
+                    <td>hpcloud</td>
+                    <td>nova</td>
+                    <td> created</td>
+                </tr>
+                <tr>
+                    <td colspan="6" class="hiddenRow"><div id="demo3" class="accordian-body collapse">Demo3</div></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<h1>Changing hide/ unhide icon</h1>
+<div>
+    <a data-toggle="collapse" href="#other">
+        <h3>Others<span class="pull-right glyphicon glyphicon-plus"></span></h3>
+    </a>
+    <div id="other" class="collapse">
+        <h1>Others are</h1>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.collapse')
+             .on('shown.bs.collapse', function() {
+                 $(this)
+                     .parent()
+                     .find(".glyphicon-plus")
+                     .removeClass("glyphicon-plus")
+                     .addClass("glyphicon-minus");
+                 })
+             .on('hidden.bs.collapse', function() {
+                 $(this)
+                     .parent()
+                     .find(".glyphicon-minus")
+                     .removeClass("glyphicon-minus")
+                     .addClass("glyphicon-plus");
+                 });
+             });
+</script>
+}

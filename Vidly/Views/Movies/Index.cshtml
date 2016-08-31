@@ -1,0 +1,43 @@
+﻿@model PagedList.IPagedList< VidlyMovies.Models.Movie>
+@using PagedList.Mvc
+
+@{
+    ViewBag.Title = "Movie Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h1>Movies</h1>
+<input class="btn btn-primary" type="button" value="New Movie" onclick="@("window.location.href='" + @Url.Action("New", "Movies") + "'");" />
+
+<table class="table table-striped table-hover ">
+    <thead>
+        <tr>
+            <th><h3>Movie ID</h3></th>
+            <th><h3>Movie</h3></th>
+            <th><h3>Genre</h3></th>
+            <th><h3>Language</h3></th>
+            <th><h3>Stock</h3> </th>
+            <th><h3>Available Stock</h3> </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var movie in Model)
+            {
+            <tr>
+                <td>@movie.ID</td>
+                <td>@movie.Name</td>
+                <td>@movie.MovieGenreTypes.GenreType</td>
+                <td>@movie.Language</td>
+                <td>@movie.Stock</td>
+                <td>@movie.AvailableStock</td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", "Movies", new { id = @movie.ID }, null)|
+                    @Html.ActionLink("Details", "Details", "Movies", new { id = @movie.ID }, null)|
+                    @Html.ActionLink("Delete", "Delete", "Movies", new { id = @movie.ID }, null)
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page }))

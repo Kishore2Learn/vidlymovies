@@ -1,0 +1,164 @@
+﻿
+@{
+    ViewBag.Title = "New Rental Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*  To create controls using zen coding using Web Essentials
+    div.form-group>label+input[type='text'].form-control*@
+
+
+<h2>Rental Return </h2>
+<table>
+    <tr>
+        <td>
+            <label>Customer</label>
+            <div class="tt-container">
+                <input id="customer" name="customer" data-rule-validCustomer="true" required type="text" value="" class="form-control" />
+            </div>
+        </td>
+        <td>
+            <h3 style="margin-right: 20px; margin-left: 20px;">    or      </h3>
+        </td>
+        <td>
+            <label>Movie</label>
+            <div class="tt-container">
+                <input id="movie" name="movie" data-rule-atLeastOneMovie="true" type="text" value="" class="form-control" />
+            </div>
+        </td>
+    </tr>
+</table>
+
+<form name="Returns" style="padding-top: 15px;">
+    <table id="RentalDetails" class="table table-striped table-hover ">
+        <thead>
+            <tr>
+                <th><h3>Return</h3> </th>
+                <th><h3>Movie Name</h3> </th>
+                <th><h3>Customer Name</h3> </th>
+                <th><h3>Date Rented</h3> </th>
+                <th><h3>Rental ID</h3>  </th>
+
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</form>
+
+@section scripts
+{
+    <script>
+        function loadRentals(query) {
+
+            $('#RentalDetails').DataTable().destroy();
+
+            $("#RentalDetails").DataTable({
+                ajax: {
+                    url: "/api/Rentals?query=" + query,
+                    method: "get",
+                    dataSrc: ""
+                },
+                columns: [
+                    {
+                        data: "id",
+                        render: function (data) {
+                            return "<button class='btn-link js-return' data-rental-id=" + data + ">Return</button>";
+                        }
+                    },
+                    {
+                        data: "movie.name"
+                    },
+                    {
+                        data: "customer.name"
+                    },
+
+                    {
+                        data: "dateRented"
+                    },
+                    {
+                        data: "id"
+                    }
+                ],
+                lengthMenu: [5, 10, 15]
+            })
+        }
+        $(document).ready(function () {
+
+            var customers = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                remote: {
+                    url: '/api/customers?query=%QUERY',
+                    wildcard: '%QUERY'
+                }
+            });
+
+            $('#customer').typeahead({
+                minLength: 1,
+                highlight:true
+            }, {
+                name: 'customers',
+                display: 'name',
+                source: customers
+            }).on("typeahead:select", function (e, customer) {
+                $("#movie").typeahead("val", "");
+
+                loadRentals("Customer-" + customer.name);
+            });
+
+            var movies = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                remote: {
+                    url: '/api/movies?query=%QUERY&all=true',
+                    wildcard: '%QUERY'
+                }
+            });
+
+            $('#movie').typeahead({
+                minLength: 1,
+                highlight: true
+            }, {
+                name: 'movies',
+                display: 'name',
+                source: movies
+            }).on("typeahead:select", function (e, movie) {
+                $("#customer").typeahead("val", "");
+
+                loadRentals("Movie-" + movie.name);
+            });
+
+            $("#RentalDetails").on("click", ".js-return", function (e) {
+                var button = $(this);
+                var table = $('#RentalDetails').DataTable();
+                e.preventDefault();
+
+                var $row = $(this).closest("tr");    // Find the row
+                var $tds = $row.find("td");
+                var rentalDetails = []
+                $.each($tds, function () {
+                    rentalDetails.push($(this).text());
+                });
+                
+                bootbox.confirm("Are you sure you want to return " 
+                    + rentalDetails[1] + " movie?", function (result) {
+                        if (result) {
+                            $.ajax({
+                                url: "/api/Rentals/" + button.attr("data-rental-id"),
+                                method: "PUT",
+                                success: function () {
+                                    table.row(button.parents("tr")).remove().draw();
+                                    toastr.success("Return updated");
+                                },
+                                error: function myfunction() {
+                                    toastr.error("Something unexpected happened.");
+                                }
+                            });
+                        }
+                    });
+            });
+        })
+
+        
+    </script>
+}

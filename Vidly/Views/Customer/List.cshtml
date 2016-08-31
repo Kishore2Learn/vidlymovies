@@ -1,0 +1,70 @@
+﻿@model IEnumerable<VidlyMovies.Models.Customer>
+
+@{
+    ViewBag.Title = "Customer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if (ViewBag.ContainData != "1")
+{
+    if ((ViewBag.ContainData == "0") || (ViewBag.ContainData == "2"))
+    {
+        <h1 style="color:red">@ViewBag.Description</h1>
+    }
+}
+<h1>Customers</h1>
+<input class="btn btn-primary" type="button" value="New Customer" onclick="@("window.location.href='" + @Url.Action("New", "Customer") + "'");" />
+<br />
+<br />
+
+@if (!Model.Any())
+{   
+    <br />    <br />
+    <p>We don't have any customers</p>
+}
+@if (true)
+{
+    <table id="customers" class="table table-striped table-hover ">
+        <thead>
+            <tr>
+                <th><h3>Customer ID</h3></th>
+                <th><h3>Customer</h3></th>
+                <th><h3>Subscription Type</h3> </th>
+                <th><h3>Discount Rate</h3> </th>
+                <th><h3>Options</h3></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var customer in Model)
+            {
+                <tr>
+                    <td>@customer.ID</td> 
+                    <td>@customer.Name</td>
+                    <td>@customer.MembershipType.MemberShipDescription</td>
+                    <td>@customer.MembershipType.DiscountRate%</td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", "Customer", new { id = @customer.ID }, null)|
+                        @Html.ActionLink("Details", "Details", "Customer", new { id = @customer.ID }, null)|
+                        <button data-customer-id="@customer.ID" class="btn btn-link js-btn-delete">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <hr />
+    <h1>Membership Types</h1>
+    <br />
+    <table id="MembershipTypes" class="table table-striped table-hover ">
+        <thead>
+            <tr>
+                <th><h3>Subscription Type</h3> </th>
+                <th><h3>Signup Fee</h3> </th>
+                <th><h3>Duration In Months</h3> </th>
+                <th><h3>Discount %</h3> </th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+
+}

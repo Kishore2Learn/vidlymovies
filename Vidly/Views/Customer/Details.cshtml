@@ -1,0 +1,60 @@
+﻿@model VidlyMovies.Models.Customer
+@{
+    ViewBag.Title = "Customer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if (ViewBag.ContainData != "1")
+{
+    if ((ViewBag.ContainData == "0") || (ViewBag.ContainData == "2"))
+    {
+        <h1 style="color:red">@ViewBag.Description</h1>
+    }
+}
+@if (ViewBag.ContainData == "1")
+{
+    <h1>Customer Details</h1>
+    <br />
+    <input class="btn btn-primary" type="button" value="Edit" onclick="@("window.location.href='" + @Url.Action("Edit", "Customer",new {id=Model.ID }) + "'");" />
+    <br />
+    <h2>@Model.Name</h2>
+    <ul>
+        <li>@Model.ID</li>
+        @if (Model.BirthDate.HasValue)
+        {
+            <li>@Model.BirthDate.GetValueOrDefault().Date.ToString("dd MMM yyyy")</li>
+        }
+        <li>@Model.MembershipType.MemberShipDescription</li>
+    </ul>
+     
+    <table class="table table-striped table-hover ">
+        <tbody>
+            <tr>
+                <td><b>Customer Name</b></td>
+            </tr>
+            <tr>
+                <td>@Model.Name</td> 
+            </tr>
+            <tr>
+                <td><b>Customer ID</b></td>
+            </tr>
+            <tr>
+                <td>@Model.ID</td>
+            </tr>
+            <tr>
+                <td><b>Member Ship Type</b></td>
+            </tr>
+            <tr>
+                <td>@Model.MembershipType.MemberShipDescription</td>
+            </tr>
+            @if (Model.BirthDate.HasValue)
+            {
+                <tr>
+                    <td><b>Birth Date</b></td>
+                </tr>
+                <tr>
+                    <td>@Model.BirthDate.GetValueOrDefault().Date.ToString("dd MMM yyyy")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
