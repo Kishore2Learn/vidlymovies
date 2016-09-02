@@ -24,5 +24,9 @@ namespace VidlyMovies.DTOs
         public string RentedBy { get; set; }
 
         public string ReceivedBy { get; set; }
+
+        public string DateRentedForDisplay { get { return DateRented.Date.ToString("dd MMM yyyy");} }
+
+        public string DateReturnedForDisplay { get { return DateReturned.GetValueOrDefault().Date.ToString("dd MMM yyyy"); } }
     }
 }

@@ -45,7 +45,7 @@ namespace VidlyMovies.Controllers.API
             {
                 customerName = query.Split('-')[1];
                 var rentals = from r in moviesQuery
-                              where r.Customer.Name.Contains(customerName) 
+                              where r.Customer.Name.Contains(customerName)
                               select r;
 
                 return Ok(rentals
